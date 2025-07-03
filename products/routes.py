@@ -1,9 +1,9 @@
 from itertools import product
 
 from flask import Blueprint,request,jsonify
-import products.models
+from products.models import get_product_by_name,add_new_product
 from decorators.decorators import log_call,delay,timer
-from products.models import is_product_exists, get_product, add_product
+from products.models import is_product_exists, get_product_by_name, add_new_product
 
 products_bp = Blueprint('products', __name__)
 
@@ -20,10 +20,10 @@ def get_product():
         return jsonify({'error':'product name must be a string'}), 400
     if not is_product_exists(product_name):
         return jsonify({'error':'product does not exist'}), 400
-    current_product = get_product(product_name)
+    current_product = get_product_by_name(product_name)
     return jsonify({'data':current_product}), 200
 
-@products_bp.route('/add', methods=['POST'])
+@products_bp.route('/products/add', methods=['POST'])
 @log_call
 @timer
 @delay(rate=2)
@@ -35,10 +35,12 @@ def add_product():
         return jsonify({'error':'product already exists'}), 400
     cost = request.json.get('cost')
     if not cost:
-        return jsonify({'error':'email required'}), 400
-    if type(cost) != float or type(cost) != int:
-        return jsonify({'error':'cost must be numeric'}), 400
-    new_product = add_product(name,cost)
+        return jsonify({'error':'cost required'}), 400
+    try:
+        cost = float(cost)
+    except:
+        return jsonify({'error':'cost must be a number'}), 400
+    new_product = add_new_product(name, cost)
     if not new_product:
         return jsonify({'error':'product could not be created'}), 400
     return 200
