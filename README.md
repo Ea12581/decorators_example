@@ -30,11 +30,14 @@ Install dependencies:
 ```bash
 pip install Flask
 
+
 🏁 Running the Application
 Start the server:
 
+bash
+Copy
+Edit
 python app.py
-
 API will be available at http://127.0.0.1:5000.
 
 🔗 API Endpoints
@@ -43,9 +46,15 @@ Retrieve a coffee product by name.
 
 Example request:
 
+pgsql
+Copy
+Edit
 GET /products?name=latte
 Successful response:
 
+json
+Copy
+Edit
 {
   "data": {
     "name": "Latte",
@@ -60,16 +69,18 @@ Non-string name → {"error": "product name must be a string"}
 
 Nonexistent product → {"error": "product does not exist"}
 
-
 POST /products/add
 Add a new coffee product.
 
 Request body (JSON):
+
+json
+Copy
+Edit
 {
   "name": "Black coffee",
   "cost": 2.75
 }
-
 ✅ Success: HTTP 200 with empty response.
 
 Error responses:
@@ -84,13 +95,15 @@ Invalid cost → {"error": "cost must be a number"}
 
 📖 Example Mock Coffee Menu
 Defined in models.py:
+
+python
+Copy
+Edit
 mock_products = {
     "espresso": {"name": "Espresso", "price": 2.50},
     "cappuccino": {"name": "Cappuccino", "price": 3.50},
     ...
 }
-
-
 ⚙️ Decorators
 All endpoints use these decorators:
 
@@ -106,3 +119,4 @@ Product identifiers are the lowercase product names (e.g., "latte", "mocha").
 Artificial delays simulate realistic response times.
 
 Project uses a modular, maintainable Flask Blueprint structure.
+
